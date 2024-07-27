@@ -1,10 +1,12 @@
 import 'package:budget_app_starting/components.dart';
 import 'package:budget_app_starting/view_model.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sign_button/sign_button.dart';
 
 class LoginViewWeb extends HookConsumerWidget {
   @override
@@ -143,7 +145,46 @@ class LoginViewWeb extends HookConsumerWidget {
                           ),
                         ),
                       ),
+                      SizedBox(
+                        width: 20.0,
+                      ),
+                      SizedBox(
+                        height: 50.0,
+                        width: 150.0,
+                        child: MaterialButton(
+                          onPressed: () async {
+                            await viewModelProvider.signInWithEmailAndPassword(
+                                context, _emailField.text, _passwordField.text);
+                          },
+                          child: OpenSans(
+                            text: "Login",
+                            size: 25.0,
+                            color: Colors.white,
+                          ),
+                          splashColor: Colors.grey,
+                          color: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                      )
                     ],
+                  ),
+                  SizedBox(
+                    height: 30.0,
+                  ),
+                  SignInButton(
+                    buttonType: ButtonType.google,
+                    onPressed: () async {
+                      if (kIsWeb) {
+                        await viewModelProvider.signInWithGoogleWeb(context);
+                      } else {
+                        await viewModelProvider.signInWithGoogleMobile(context);
+                      }
+                    },
+                    btnColor: Colors.black,
+                    btnTextColor: Colors.white,
+                    buttonSize: ButtonSize.large,
                   )
                 ],
               ),

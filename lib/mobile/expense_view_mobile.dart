@@ -1,7 +1,9 @@
 import 'package:budget_app_starting/components.dart';
 import 'package:budget_app_starting/view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 bool isLoading = true;
 
@@ -70,6 +72,40 @@ class ExpenseViewMobile extends HookConsumerWidget {
                 ),
                 elevation: 20.0,
               ),
+              SizedBox(
+                height: 20.0,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  IconButton(
+                    onPressed: () async {
+                      await launchUrl(Uri.parse("https://instagram.com/"));
+                    },
+                    icon: SvgPicture.asset(
+                      "instagram.svg",
+                      colorFilter: ColorFilter.mode(
+                        Colors.black,
+                        BlendMode.srcIn,
+                      ),
+                      width: 35.0,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () async {
+                      await launchUrl(Uri.parse("https://twitter.com/"));
+                    },
+                    icon: SvgPicture.asset(
+                      "twitter.svg",
+                      colorFilter: ColorFilter.mode(
+                        Colors.black,
+                        BlendMode.srcIn,
+                      ),
+                      width: 35.0,
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
         ),
@@ -79,6 +115,137 @@ class ExpenseViewMobile extends HookConsumerWidget {
             size: 30.0,
           ),
           backgroundColor: Colors.black,
+          centerTitle: true,
+          title: Poppins(
+            text: "Dashboard",
+            size: 20.0,
+            color: Colors.white,
+          ),
+          actions: [
+            IconButton(
+              onPressed: () async {
+                /// The  reset function
+              },
+              icon: Icon(
+                Icons.refresh,
+                color: Colors.white,
+                size: 30.0,
+              ),
+            ),
+          ],
+        ),
+        body: ListView(
+          children: [
+            SizedBox(
+              height: 40.0,
+            ),
+            Column(
+              children: [
+                Container(
+                  height: 240.0,
+                  width: deviceWidth / 1.5,
+                  padding: EdgeInsets.all(15.0),
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(25.0),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Poppins(
+                            text: "Budget left",
+                            size: 14.0,
+                            color: Colors.white,
+                          ),
+                          Poppins(
+                            text: "Total expense",
+                            size: 14.0,
+                            color: Colors.white,
+                          ),
+                          Poppins(
+                            text: "Total income",
+                            size: 14.0,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                      RotatedBox(
+                        quarterTurns: 1,
+                        child: Divider(
+                          indent: 40.0,
+                          endIndent: 40.0,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Poppins(
+                            text: budgetLeft.toString(),
+                            size: 14.0,
+                            color: Colors.white,
+                          ),
+                          Poppins(
+                            text: totalExpense.toString(),
+                            size: 14.0,
+                            color: Colors.white,
+                          ),
+                          Poppins(
+                            text: totalIncome.toString(),
+                            size: 14.0,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 40.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SizedBox(
+                      height: 40.0,
+                      width: 155.0,
+                      child: MaterialButton(
+                        onPressed: () async {},
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Icon(
+                              Icons.add,
+                              color: Colors.white,
+                              size: 15.0,
+                            ),
+                            OpenSans(
+                              text: "Add expense",
+                              size: 14.0,
+                              color: Colors.white,
+                            ),
+                          ],
+                        ),
+                        splashColor: Colors.grey,
+                        color: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                            10.0,
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                )
+              ],
+            )
+          ],
         ),
       ),
     );

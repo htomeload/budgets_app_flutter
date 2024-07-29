@@ -111,4 +111,30 @@ class ViewModel extends ChangeNotifier {
   Future<void> logout() async {
     await _auth.signOut();
   }
+
+  Future addExpense(BuildContext context) async {
+    final formKey = GlobalKey<FormState>();
+    TextEditingController controllerName = TextEditingController();
+    TextEditingController controllerAmount = TextEditingController();
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        actionsAlignment: MainAxisAlignment.center,
+        contentPadding: EdgeInsets.all(
+          32.0,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            10.0,
+          ),
+        ),
+        title: Form(
+            key: formKey,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [],
+            )),
+      ),
+    );
+  }
 }

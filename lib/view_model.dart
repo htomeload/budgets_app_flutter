@@ -129,11 +129,51 @@ class ViewModel extends ChangeNotifier {
           ),
         ),
         title: Form(
-            key: formKey,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [],
-            )),
+          key: formKey,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextForm(
+                  text: "Name",
+                  containerWidth: 130.0,
+                  hintText: "Name",
+                  controller: controllerName,
+                  validator: (text) {
+                    if (text.toString().isEmpty) {
+                      return "Required";
+                    }
+                  }),
+              SizedBox(
+                width: 10.0,
+              ),
+              TextForm(
+                  text: "Amount",
+                  containerWidth: 100.0,
+                  hintText: "Amount",
+                  controller: controllerAmount,
+                  validator: (text) {
+                    if (text.toString().isEmpty) {
+                      return "Required";
+                    }
+                  })
+            ],
+          ),
+        ),
+        actions: [
+          MaterialButton(
+            onPressed: () async {
+              if (formKey.currentState!.validate()) {
+                // userCollection.doc()
+              }
+            },
+            child: OpenSans(text: "Save", size: 15.0, color: Colors.white),
+            splashColor: Colors.grey,
+            color: Colors.black,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+          ),
+        ],
       ),
     );
   }

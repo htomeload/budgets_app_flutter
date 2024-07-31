@@ -163,7 +163,17 @@ class ViewModel extends ChangeNotifier {
           MaterialButton(
             onPressed: () async {
               if (formKey.currentState!.validate()) {
-                // userCollection.doc()
+                await userCollection
+                    .doc(_auth.currentUser!.uid)
+                    .collection('expenses')
+                    .add({
+                  "name": controllerName.text,
+                  "amount": controllerAmount.text,
+                }).onError((error, stackTrace) {
+                  logger.d("add expense error $error");
+                  return DialogBox(context, error.toString());
+                });
+                Navigator.pop(context);
               }
             },
             child: OpenSans(text: "Save", size: 15.0, color: Colors.white),
@@ -174,6 +184,29 @@ class ViewModel extends ChangeNotifier {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Future addIncome(BuildContext context) async {
+    final formKey = GlobalKey<FormState>();
+    TextEditingController controllerName = TextEditingController();
+    TextEditingController controllerAmount = TextEditingController();
+
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        actionsAlignment: MainAxisAlignment.center,
+        contentPadding: EdgeInsets.all(32.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            10.0,
+          ),
+          side: BorderSide(
+            width: 1.0,
+            color: Colors.black,
+          ),
+        ),
       ),
     );
   }

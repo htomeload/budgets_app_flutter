@@ -216,9 +216,11 @@ class ExpenseViewMobile extends HookConsumerWidget {
                       height: 40.0,
                       width: 155.0,
                       child: MaterialButton(
-                        onPressed: () async {},
+                        onPressed: () async {
+                          await viewModelProvider.addExpense(context);
+                        },
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Icon(
                               Icons.add,
@@ -227,6 +229,38 @@ class ExpenseViewMobile extends HookConsumerWidget {
                             ),
                             OpenSans(
                               text: "Add expense",
+                              size: 14.0,
+                              color: Colors.white,
+                            ),
+                          ],
+                        ),
+                        splashColor: Colors.grey,
+                        color: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                            10.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10.0,
+                    ),
+                    SizedBox(
+                      height: 40.0,
+                      width: 150.0,
+                      child: MaterialButton(
+                        onPressed: () async {},
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Icon(
+                              Icons.add,
+                              color: Colors.white,
+                              size: 15.0,
+                            ),
+                            OpenSans(
+                              text: "Income",
                               size: 14.0,
                               color: Colors.white,
                             ),

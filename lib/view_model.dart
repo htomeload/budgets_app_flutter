@@ -1,4 +1,5 @@
 import 'package:budget_app_starting/components.dart';
+import 'package:budget_app_starting/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -165,7 +166,7 @@ class ViewModel extends ChangeNotifier {
               if (formKey.currentState!.validate()) {
                 await userCollection
                     .doc(_auth.currentUser!.uid)
-                    .collection('expenses')
+                    .collection(CurrentUserCollections.Expenses)
                     .add({
                   "name": controllerName.text,
                   "amount": controllerAmount.text,
@@ -207,7 +208,104 @@ class ViewModel extends ChangeNotifier {
             color: Colors.black,
           ),
         ),
+        title: Form(
+          key: formKey,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextForm(
+                text: "Name",
+                containerWidth: 130.0,
+                hintText: "Name",
+                controller: controllerName,
+                validator: (text) {
+                  if (text.toString().isEmpty) {
+                    return "Required";
+                  }
+                },
+              ),
+              SizedBox(
+                width: 10.0,
+              ),
+              TextForm(
+                text: "Amount",
+                containerWidth: 100.0,
+                hintText: "Amount",
+                controller: controllerAmount,
+                digitsOnly: true,
+                validator: (text) {
+                  if (text.toString().isEmpty) {
+                    return "Required";
+                  }
+                },
+              )
+            ],
+          ),
+        ),
+        actions: [
+          MaterialButton(
+            onPressed: () async {
+              if (formKey.currentState!.validate()) {
+                await userCollection
+                    .doc(_auth.currentUser!.uid)
+                    .collection(CurrentUserCollections.Incomes)
+                    .add({
+                      "name": controllerName.text,
+                      "amount": controllerAmount.text
+                    })
+                    .then((value) => logger.d("Income added"))
+                    .onError((error, stackTrace) {
+                      logger.d("add income error $error");
+                      return DialogBox(context, error.toString());
+                    });
+                Navigator.pop(context);
+              }
+            },
+            child: OpenSans(
+              text: "Save",
+              size: 15.0,
+              color: Colors.white,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            color: Colors.black,
+            splashColor: Colors.grey,
+          ),
+        ],
       ),
     );
+  }
+
+  void expensesStream() async {
+    await for (var snapshot in userCollection
+        .doc(_auth.currentUser!.uid)
+        .collection(CurrentUserCollections.Expenses)
+        .snapshots()) {
+      expensesAmount = [];
+      expensesName = [];
+
+      for (var expense in snapshot.docs) {
+        expensesName.add(expense.data()['name']);
+        expensesAmount.add(expense.data()['amount']);
+        notifyListeners();
+      }
+    }
+  }
+
+  void incomeStream() async {
+    await for (var snapshot in userCollection
+        .doc(_auth.currentUser!.uid)
+        .collection(CurrentUserCollections.Incomes)
+        .snapshots()) {
+      incomesAmount = [];
+      incomesName = [];
+
+      for (var income in snapshot.docs) {
+        incomesAmount.add(income.data()['amount']);
+        incomesName.add(income.data()['name']);
+        notifyListeners();
+      }
+    }
   }
 }

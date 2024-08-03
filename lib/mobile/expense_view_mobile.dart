@@ -156,6 +156,7 @@ class ExpenseViewMobile extends HookConsumerWidget {
                     children: [
                       Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Poppins(
                             text: "Budget left",
@@ -250,7 +251,9 @@ class ExpenseViewMobile extends HookConsumerWidget {
                       height: 40.0,
                       width: 150.0,
                       child: MaterialButton(
-                        onPressed: () async {},
+                        onPressed: () async {
+                          await viewModelProvider.addIncome(context);
+                        },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
@@ -260,7 +263,7 @@ class ExpenseViewMobile extends HookConsumerWidget {
                               size: 15.0,
                             ),
                             OpenSans(
-                              text: "Income",
+                              text: "Add Income",
                               size: 14.0,
                               color: Colors.white,
                             ),
@@ -276,7 +279,112 @@ class ExpenseViewMobile extends HookConsumerWidget {
                       ),
                     )
                   ],
-                )
+                ),
+                SizedBox(
+                  height: 30.0,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Expense list
+                      Column(
+                        children: [
+                          OpenSans(
+                            text: "Expenses",
+                            size: 15.0,
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(7.0),
+                            height: 210.0,
+                            width: 170.0,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(15.0),
+                              ),
+                              border: Border.all(
+                                width: 1.0,
+                                color: Colors.black,
+                              ),
+                            ),
+                            child: ListView.builder(
+                              itemCount:
+                                  viewModelProvider.expensesAmount.length,
+                              itemBuilder: (context, index) {
+                                return Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Poppins(
+                                        text: viewModelProvider
+                                            .expensesName[index],
+                                        size: 12.0),
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Poppins(
+                                        text: viewModelProvider
+                                            .expensesAmount[index],
+                                        size: 12.0,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      // income list
+                      Column(
+                        children: [
+                          OpenSans(
+                            text: "Incomes",
+                            size: 15.0,
+                            color: Colors.black,
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(7.0),
+                            height: 210.0,
+                            width: 170.0,
+                            decoration: BoxDecoration(
+                              border:
+                                  Border.all(width: 1.0, color: Colors.black),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(
+                                  15.0,
+                                ),
+                              ),
+                            ),
+                            child: ListView.builder(
+                              itemBuilder: (context, index) {
+                                return Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Poppins(
+                                        text: viewModelProvider
+                                            .incomesName[index],
+                                        size: 12.0),
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Poppins(
+                                        text: viewModelProvider
+                                            .incomesAmount[index],
+                                        size: 12.0,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                              itemCount: viewModelProvider.incomesAmount.length,
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
               ],
             )
           ],

@@ -12,14 +12,21 @@ class ExpenseViewMobile extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final viewModelProvider = ref.watch(viewModel);
     double deviceWidth = MediaQuery.of(context).size.width;
+
+    if (isLoading) {
+      viewModelProvider.expensesStream();
+      viewModelProvider.incomeStream();
+      isLoading = false;
+    }
+
     int totalExpense = 0;
     int totalIncome = 0;
 
     void calculate() {
       viewModelProvider.expensesAmount
-          .forEach((item) => totalExpense + int.parse(item));
+          .forEach((item) => totalExpense += int.parse(item));
       viewModelProvider.incomesAmount
-          .forEach((item) => totalIncome + int.parse(item));
+          .forEach((item) => totalIncome += int.parse(item));
     }
 
     calculate();
@@ -124,7 +131,7 @@ class ExpenseViewMobile extends HookConsumerWidget {
           actions: [
             IconButton(
               onPressed: () async {
-                /// The  reset function
+                viewModelProvider.reset();
               },
               icon: Icon(
                 Icons.refresh,

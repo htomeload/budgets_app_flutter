@@ -308,4 +308,29 @@ class ViewModel extends ChangeNotifier {
       }
     }
   }
+
+  Future<void> reset() async {
+    await userCollection
+        .doc(_auth.currentUser!.uid)
+        .collection(CurrentUserCollections.Expenses)
+        .get()
+        .then(
+      (snapshot) {
+        for (DocumentSnapshot ds in snapshot.docs) {
+          ds.reference.delete();
+        }
+      },
+    );
+    await userCollection
+        .doc(_auth.currentUser!.uid)
+        .collection(CurrentUserCollections.Incomes)
+        .get()
+        .then(
+      (snapshot) {
+        for (DocumentSnapshot ds in snapshot.docs) {
+          ds.reference.delete();
+        }
+      },
+    );
+  }
 }

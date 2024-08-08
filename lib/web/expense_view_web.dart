@@ -225,6 +225,228 @@ class ExpenseViewWeb extends HookConsumerWidget {
                 SizedBox(
                   width: 30.0,
                 ),
+                // Total calculation
+                Container(
+                  height: 300.0,
+                  width: 280.0,
+                  padding: EdgeInsets.all(15.0),
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(25.0),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Poppins(
+                            text: "Budget left",
+                            size: 17.0,
+                            color: Colors.white,
+                          ),
+                          Poppins(
+                            text: "Total expense",
+                            size: 17.0,
+                            color: Colors.white,
+                          ),
+                          Poppins(
+                            text: "Total income",
+                            size: 17.0,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                      RotatedBox(
+                        quarterTurns: 1,
+                        child: Divider(
+                          indent: 40.0,
+                          endIndent: 40.0,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Poppins(
+                            text: budgetLeft.toString(),
+                            size: 17.0,
+                            color: Colors.white,
+                          ),
+                          Poppins(
+                            text: totalExpense.toString(),
+                            size: 17.0,
+                            color: Colors.white,
+                          ),
+                          Poppins(
+                            text: totalIncome.toString(),
+                            size: 17.0,
+                            color: Colors.white,
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 40.0,
+            ),
+            Divider(
+              indent: deviceWidth / 4,
+              endIndent: deviceWidth / 4,
+              thickness: 3.0,
+            ),
+            SizedBox(
+              height: 50.0,
+            ),
+            // Expense + Incomes List
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                // Expense list
+                Container(
+                  height: 320.0,
+                  width: 260.0,
+                  padding: EdgeInsets.all(15.0),
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(25.0),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      // Expense heading
+                      Center(
+                        child: Poppins(
+                          text: "Expenses",
+                          size: 25.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Divider(
+                        indent: 30.0,
+                        endIndent: 30.0,
+                        color: Colors.white,
+                      ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(10.0),
+                        height: 210.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(25.0),
+                          ),
+                          border: Border.all(
+                            width: 1.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                        child: ListView.builder(
+                          itemCount: viewModelProvider.expensesAmount.length,
+                          itemBuilder: (context, index) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Poppins(
+                                  text: viewModelProvider.expensesName[index],
+                                  size: 15.0,
+                                  color: Colors.white,
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Poppins(
+                                    text:
+                                        viewModelProvider.expensesAmount[index],
+                                    size: 15.0,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              ],
+                            );
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                // Income list
+                Container(
+                  height: 320.0,
+                  width: 260.0,
+                  padding: EdgeInsets.all(15.0),
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(25.0),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      // Income heading
+                      Center(
+                        child: Poppins(
+                          text: "Incomes",
+                          size: 25.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Divider(
+                        indent: 30.0,
+                        endIndent: 30.0,
+                        color: Colors.white,
+                      ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(10.0),
+                        height: 210.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(15.0),
+                          ),
+                          border: Border.all(
+                            width: 1.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                        child: ListView.builder(
+                          itemCount: viewModelProvider.incomesAmount.length,
+                          itemBuilder: (context, index) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Poppins(
+                                  text: viewModelProvider.incomesName[index],
+                                  size: 15.0,
+                                  color: Colors.white,
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Poppins(
+                                    text:
+                                        viewModelProvider.incomesAmount[index],
+                                    size: 15.0,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              ],
+                            );
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                )
               ],
             )
           ],

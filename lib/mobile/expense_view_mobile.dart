@@ -1,9 +1,7 @@
 import 'package:budget_app_starting/components.dart';
 import 'package:budget_app_starting/view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 bool isLoading = true;
 
@@ -19,103 +17,9 @@ class ExpenseViewMobile extends HookConsumerWidget {
       isLoading = false;
     }
 
-    int totalExpense = 0;
-    int totalIncome = 0;
-
-    void calculate() {
-      viewModelProvider.expensesAmount
-          .forEach((item) => totalExpense += int.parse(item));
-      viewModelProvider.incomesAmount
-          .forEach((item) => totalIncome += int.parse(item));
-    }
-
-    calculate();
-    int budgetLeft = totalIncome - totalExpense;
-
     return SafeArea(
       child: Scaffold(
-        drawer: Drawer(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              DrawerHeader(
-                padding: EdgeInsets.only(bottom: 20.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      width: 1.0,
-                      color: Colors.black,
-                    ),
-                  ),
-                  child: CircleAvatar(
-                    radius: 180.0,
-                    backgroundColor: Colors.white,
-                    child: Image(
-                      height: 100.0,
-                      image: AssetImage('logo.png'),
-                      filterQuality: FilterQuality.high,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              MaterialButton(
-                onPressed: () async {
-                  viewModelProvider.logout();
-                },
-                child: OpenSans(
-                  text: "Logout",
-                  size: 20.0,
-                  color: Colors.white,
-                ),
-                color: Colors.black,
-                height: 50.0,
-                minWidth: 200.0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
-                elevation: 20.0,
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  IconButton(
-                    onPressed: () async {
-                      await launchUrl(Uri.parse("https://instagram.com/"));
-                    },
-                    icon: SvgPicture.asset(
-                      "instagram.svg",
-                      colorFilter: ColorFilter.mode(
-                        Colors.black,
-                        BlendMode.srcIn,
-                      ),
-                      width: 35.0,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () async {
-                      await launchUrl(Uri.parse("https://twitter.com/"));
-                    },
-                    icon: SvgPicture.asset(
-                      "twitter.svg",
-                      colorFilter: ColorFilter.mode(
-                        Colors.black,
-                        BlendMode.srcIn,
-                      ),
-                      width: 35.0,
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
-        ),
+        drawer: DrawerExpense(),
         appBar: AppBar(
           iconTheme: IconThemeData(
             color: Colors.white,
@@ -158,61 +62,7 @@ class ExpenseViewMobile extends HookConsumerWidget {
                       Radius.circular(25.0),
                     ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Poppins(
-                            text: "Budget left",
-                            size: 14.0,
-                            color: Colors.white,
-                          ),
-                          Poppins(
-                            text: "Total expense",
-                            size: 14.0,
-                            color: Colors.white,
-                          ),
-                          Poppins(
-                            text: "Total income",
-                            size: 14.0,
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
-                      RotatedBox(
-                        quarterTurns: 1,
-                        child: Divider(
-                          indent: 40.0,
-                          endIndent: 40.0,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Poppins(
-                            text: budgetLeft.toString(),
-                            size: 14.0,
-                            color: Colors.white,
-                          ),
-                          Poppins(
-                            text: totalExpense.toString(),
-                            size: 14.0,
-                            color: Colors.white,
-                          ),
-                          Poppins(
-                            text: totalIncome.toString(),
-                            size: 14.0,
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                  child: TotalCalculation(14.0),
                 ),
                 SizedBox(
                   height: 40.0,
@@ -220,71 +70,11 @@ class ExpenseViewMobile extends HookConsumerWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    SizedBox(
-                      height: 40.0,
-                      width: 155.0,
-                      child: MaterialButton(
-                        onPressed: () async {
-                          await viewModelProvider.addExpense(context);
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Icon(
-                              Icons.add,
-                              color: Colors.white,
-                              size: 15.0,
-                            ),
-                            OpenSans(
-                              text: "Add expense",
-                              size: 14.0,
-                              color: Colors.white,
-                            ),
-                          ],
-                        ),
-                        splashColor: Colors.grey,
-                        color: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                            10.0,
-                          ),
-                        ),
-                      ),
-                    ),
+                    AddExpense(),
                     SizedBox(
                       width: 10.0,
                     ),
-                    SizedBox(
-                      height: 40.0,
-                      width: 150.0,
-                      child: MaterialButton(
-                        onPressed: () async {
-                          await viewModelProvider.addIncome(context);
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Icon(
-                              Icons.add,
-                              color: Colors.white,
-                              size: 15.0,
-                            ),
-                            OpenSans(
-                              text: "Add Income",
-                              size: 14.0,
-                              color: Colors.white,
-                            ),
-                          ],
-                        ),
-                        splashColor: Colors.grey,
-                        color: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                            10.0,
-                          ),
-                        ),
-                      ),
-                    )
+                    AddIncome(),
                   ],
                 ),
                 SizedBox(

@@ -2,9 +2,11 @@ import 'package:budget_app_starting/view_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sign_button/sign_button.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class OpenSans extends StatelessWidget {
   final text;
@@ -307,6 +309,232 @@ class GoogleSignInButton extends HookConsumerWidget {
       btnColor: Colors.black,
       btnTextColor: Colors.white,
       buttonSize: ButtonSize.large,
+    );
+  }
+}
+
+class DrawerExpense extends HookConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final viewModelProvider = ref.watch(viewModel);
+
+    return Drawer(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          DrawerHeader(
+            padding: EdgeInsets.only(bottom: 20.0),
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  width: 1.0,
+                  color: Colors.black,
+                ),
+              ),
+              child: CircleAvatar(
+                radius: 180.0,
+                backgroundColor: Colors.white,
+                child: Image(
+                  image: AssetImage('logo.png'),
+                  filterQuality: FilterQuality.high,
+                  height: 100.0,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10.0,
+          ),
+          MaterialButton(
+            onPressed: () async {
+              await viewModelProvider.logout();
+            },
+            elevation: 20.0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                5.0,
+              ),
+            ),
+            height: 50.0,
+            minWidth: 200.0,
+            color: Colors.black,
+            child: OpenSans(
+              text: "Logout",
+              size: 20.0,
+              color: Colors.white,
+            ),
+          ),
+          SizedBox(
+            height: 20.0,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                onPressed: () async =>
+                    await launchUrlString('https://www.instagram.com/'),
+                icon: SvgPicture.asset(
+                  'instagram.svg',
+                  colorFilter: ColorFilter.mode(Colors.black, BlendMode.srcIn),
+                  width: 35.0,
+                ),
+              ),
+              IconButton(
+                onPressed: () async =>
+                    await launchUrlString('https://www.twitter.com/'),
+                icon: SvgPicture.asset(
+                  'twitter.svg',
+                  colorFilter: ColorFilter.mode(Colors.black, BlendMode.srcIn),
+                  width: 35.0,
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class AddExpense extends HookConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final viewModelProvider = ref.watch(viewModel);
+
+    return SizedBox(
+      height: 45.0,
+      width: 160.0,
+      child: MaterialButton(
+        onPressed: () async {
+          await viewModelProvider.addExpense(context);
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
+            OpenSans(
+              text: "Add expense",
+              size: 17.0,
+              color: Colors.white,
+            ),
+          ],
+        ),
+        splashColor: Colors.grey,
+        color: Colors.black,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            10.0,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class AddIncome extends HookConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final viewModelProvider = ref.watch(viewModel);
+
+    return SizedBox(
+      height: 45.0,
+      width: 160.0,
+      child: MaterialButton(
+        onPressed: () async {
+          await viewModelProvider.addIncome(context);
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
+            OpenSans(
+              text: "Add income",
+              size: 17.0,
+              color: Colors.white,
+            ),
+          ],
+        ),
+        splashColor: Colors.grey,
+        color: Colors.black,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            10.0,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class TotalCalculation extends HookConsumerWidget {
+  final size;
+  TotalCalculation(this.size);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final viewModelProvider = ref.watch(viewModel);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Poppins(
+              text: "Budget left",
+              size: size,
+              color: Colors.white,
+            ),
+            Poppins(
+              text: "Total expense",
+              size: size,
+              color: Colors.white,
+            ),
+            Poppins(
+              text: "Total income",
+              size: size,
+              color: Colors.white,
+            ),
+          ],
+        ),
+        RotatedBox(
+          quarterTurns: 1,
+          child: Divider(
+            indent: 40.0,
+            endIndent: 40.0,
+            color: Colors.grey,
+          ),
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Poppins(
+              text: viewModelProvider.budgetLeft.toString(),
+              size: size,
+              color: Colors.white,
+            ),
+            Poppins(
+              text: viewModelProvider.totalExpense.toString(),
+              size: size,
+              color: Colors.white,
+            ),
+            Poppins(
+              text: viewModelProvider.totalIncome.toString(),
+              size: size,
+              color: Colors.white,
+            ),
+          ],
+        )
+      ],
     );
   }
 }

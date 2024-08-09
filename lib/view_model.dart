@@ -2,7 +2,6 @@ import 'package:budget_app_starting/components.dart';
 import 'package:budget_app_starting/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -20,7 +19,6 @@ class ViewModel extends ChangeNotifier {
   final _auth = FirebaseAuth.instance;
   CollectionReference userCollection =
       FirebaseFirestore.instance.collection('users');
-  // bool isSignedIn = false;
   bool isObscure = true;
   var logger = Logger();
 
@@ -29,17 +27,9 @@ class ViewModel extends ChangeNotifier {
   List incomesName = [];
   List incomesAmount = [];
 
-  //Check if Signed In
-  // Future<void> isLoggedIn() async {
-  //   await _auth.authStateChanges().listen((User? user) {
-  //     if (user == null) {
-  //       isSignedIn = false;
-  //     } else {
-  //       isSignedIn = true;
-  //     }
-  //   });
-  //   notifyListeners();
-  // }
+  int totalExpense = 0;
+  int totalIncome = 0;
+  int budgetLeft = 0;
 
   Stream<User?> get authStateChange => _auth.authStateChanges();
 
@@ -297,6 +287,7 @@ class ViewModel extends ChangeNotifier {
         expensesAmount.add(expense.data()['amount']);
         notifyListeners();
       }
+      calculate();
     }
   }
 
@@ -313,6 +304,7 @@ class ViewModel extends ChangeNotifier {
         incomesName.add(income.data()['name']);
         notifyListeners();
       }
+      calculate();
     }
   }
 
@@ -339,5 +331,16 @@ class ViewModel extends ChangeNotifier {
         }
       },
     );
+    calculate();
+    notifyListeners();
+  }
+
+  void calculate() {
+    totalExpense = 0;
+    totalIncome = 0;
+    expensesAmount.forEach((item) => totalExpense += int.parse(item));
+    incomesAmount.forEach((item) => totalIncome += int.parse(item));
+    budgetLeft = totalIncome - totalExpense;
+    notifyListeners();
   }
 }

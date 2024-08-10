@@ -147,21 +147,21 @@ class ExpenseViewWeb extends HookConsumerWidget {
                           ),
                         ),
                         child: ListView.builder(
-                          itemCount: viewModelProvider.expensesAmount.length,
+                          itemCount: viewModelProvider.expenses.length,
                           itemBuilder: (context, index) {
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Poppins(
-                                  text: viewModelProvider.expensesName[index],
+                                  text: viewModelProvider.expenses[index].name,
                                   size: 15.0,
                                   color: Colors.white,
                                 ),
                                 Align(
                                   alignment: Alignment.centerRight,
                                   child: Poppins(
-                                    text:
-                                        viewModelProvider.expensesAmount[index],
+                                    text: viewModelProvider
+                                        .expenses[index].amount,
                                     size: 15.0,
                                     color: Colors.white,
                                   ),
@@ -216,13 +216,13 @@ class ExpenseViewWeb extends HookConsumerWidget {
                           ),
                         ),
                         child: ListView.builder(
-                          itemCount: viewModelProvider.incomesAmount.length,
+                          itemCount: viewModelProvider.incomes.length,
                           itemBuilder: (context, index) {
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Poppins(
-                                  text: viewModelProvider.incomesName[index],
+                                  text: viewModelProvider.incomes[index].name,
                                   size: 15.0,
                                   color: Colors.white,
                                 ),
@@ -230,7 +230,7 @@ class ExpenseViewWeb extends HookConsumerWidget {
                                   alignment: Alignment.centerRight,
                                   child: Poppins(
                                     text:
-                                        viewModelProvider.incomesAmount[index],
+                                        viewModelProvider.incomes[index].amount,
                                     size: 15.0,
                                     color: Colors.white,
                                   ),

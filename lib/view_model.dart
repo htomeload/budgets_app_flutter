@@ -1,5 +1,6 @@
 import 'package:budget_app_starting/components.dart';
 import 'package:budget_app_starting/constants.dart';
+import 'package:budget_app_starting/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,11 +22,8 @@ class ViewModel extends ChangeNotifier {
       FirebaseFirestore.instance.collection('users');
   bool isObscure = true;
   var logger = Logger();
-
-  List expensesName = [];
-  List expensesAmount = [];
-  List incomesName = [];
-  List incomesAmount = [];
+  List<Models> expenses = [];
+  List<Models> incomes = [];
 
   int totalExpense = 0;
   int totalIncome = 0;
@@ -279,14 +277,15 @@ class ViewModel extends ChangeNotifier {
         .doc(_auth.currentUser!.uid)
         .collection(CurrentUserCollections.Expenses)
         .snapshots()) {
-      expensesAmount = [];
-      expensesName = [];
+      expenses = [];
 
-      for (var expense in snapshot.docs) {
-        expensesName.add(expense.data()['name']);
-        expensesAmount.add(expense.data()['amount']);
-        notifyListeners();
-      }
+      snapshot.docs.forEach(
+        (item) => expenses.add(
+          Models.fromJson(item.data()),
+        ),
+      );
+
+      notifyListeners();
       calculate();
     }
   }
@@ -296,14 +295,15 @@ class ViewModel extends ChangeNotifier {
         .doc(_auth.currentUser!.uid)
         .collection(CurrentUserCollections.Incomes)
         .snapshots()) {
-      incomesAmount = [];
-      incomesName = [];
+      incomes = [];
 
-      for (var income in snapshot.docs) {
-        incomesAmount.add(income.data()['amount']);
-        incomesName.add(income.data()['name']);
-        notifyListeners();
-      }
+      snapshot.docs.forEach(
+        (item) => incomes.add(
+          Models.fromJson(item.data()),
+        ),
+      );
+
+      notifyListeners();
       calculate();
     }
   }
@@ -331,15 +331,15 @@ class ViewModel extends ChangeNotifier {
         }
       },
     );
-    calculate();
     notifyListeners();
+    calculate();
   }
 
   void calculate() {
     totalExpense = 0;
     totalIncome = 0;
-    expensesAmount.forEach((item) => totalExpense += int.parse(item));
-    incomesAmount.forEach((item) => totalIncome += int.parse(item));
+    expenses.forEach((item) => totalExpense += int.parse(item.amount));
+    incomes.forEach((item) => totalIncome += int.parse(item.amount));
     budgetLeft = totalIncome - totalExpense;
     notifyListeners();
   }

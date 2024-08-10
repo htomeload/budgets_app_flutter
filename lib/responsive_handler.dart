@@ -10,8 +10,6 @@ import 'web/login_view_web.dart';
 class ResponsiveHandler extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final viewModelProvider = ref.watch(viewModel);
-    // viewModelProvider.isLoggedIn();
     final _authState = ref.watch(authStateProvider);
 
     return _authState.when(
@@ -49,22 +47,5 @@ class ResponsiveHandler extends HookConsumerWidget {
         });
       },
     );
-    /*
-    if (viewModelProvider.isSignedIn == true) {
-      return LayoutBuilder(builder: (context, constraints) {
-        if (constraints.maxWidth > 600) {
-          return ExpenseViewWeb();
-        } else
-          return ExpenseViewMobile();
-      });
-    } else {
-      return LayoutBuilder(builder: (context, constraints) {
-        if (constraints.maxWidth > 600) {
-          return LoginViewWeb();
-        } else
-          return LoginViewMobile();
-      });
-    }
-    */
   }
 }

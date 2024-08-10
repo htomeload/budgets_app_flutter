@@ -106,8 +106,7 @@ class ExpenseViewMobile extends HookConsumerWidget {
                               ),
                             ),
                             child: ListView.builder(
-                              itemCount:
-                                  viewModelProvider.expensesAmount.length,
+                              itemCount: viewModelProvider.expenses.length,
                               itemBuilder: (context, index) {
                                 return Row(
                                   mainAxisAlignment:
@@ -115,13 +114,13 @@ class ExpenseViewMobile extends HookConsumerWidget {
                                   children: [
                                     Poppins(
                                         text: viewModelProvider
-                                            .expensesName[index],
+                                            .expenses[index].name,
                                         size: 12.0),
                                     Align(
                                       alignment: Alignment.centerRight,
                                       child: Poppins(
                                         text: viewModelProvider
-                                            .expensesAmount[index],
+                                            .expenses[index].amount,
                                         size: 12.0,
                                       ),
                                     ),
@@ -161,20 +160,20 @@ class ExpenseViewMobile extends HookConsumerWidget {
                                   children: [
                                     Poppins(
                                         text: viewModelProvider
-                                            .incomesName[index],
+                                            .incomes[index].name,
                                         size: 12.0),
                                     Align(
                                       alignment: Alignment.centerRight,
                                       child: Poppins(
                                         text: viewModelProvider
-                                            .incomesAmount[index],
+                                            .incomes[index].amount,
                                         size: 12.0,
                                       ),
                                     ),
                                   ],
                                 );
                               },
-                              itemCount: viewModelProvider.incomesAmount.length,
+                              itemCount: viewModelProvider.incomes.length,
                             ),
                           )
                         ],
